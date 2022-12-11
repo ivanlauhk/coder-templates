@@ -18,4 +18,6 @@ RUN useradd --groups sudo --no-create-home ${USER} \
 && chmod 0440 /etc/sudoers.d/${USER}
 USER ${USER}
 WORKDIR /home/${USER}
-SHELL ["/bin/bash", "-c"]
+
+RUN chsh -s /bin/bash
+ENV SHELL=/bin/bash
