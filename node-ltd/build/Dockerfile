@@ -5,7 +5,7 @@ RUN apt-get update
 # install basic
 RUN apt-get install -y curl git golang sudo nano wget htop gzip zip unzip
 # install nodejs
-RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - &&\
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 RUN apt-get install -y nodejs
 # install python3
 RUN apt-get install -y python3
