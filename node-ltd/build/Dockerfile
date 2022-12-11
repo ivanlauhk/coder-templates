@@ -1,8 +1,5 @@
 FROM ubuntu
 
-RUN chsh -s /bin/bash
-ENV SHELL=/bin/bash
-
 # update APT
 RUN apt-get update
 # install basic
@@ -21,3 +18,6 @@ RUN useradd --groups sudo --no-create-home ${USER} \
 && chmod 0440 /etc/sudoers.d/${USER}
 USER ${USER}
 WORKDIR /home/${USER}
+
+# set user shell to bash
+RUN sudo usermod --shell /bin/bash ${USER} && touch .bashrc
