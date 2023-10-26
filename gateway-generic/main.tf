@@ -36,8 +36,18 @@ module "jetbrains_gateway" {
 	agent_id       = coder_agent.main.id
 	agent_name     = "main"
 	folder         = "/home/${local.username}"
-	jetbrains_ides = ["GO", "WS", "IU", "PY"]
+	jetbrains_ides = ["IU", "WS", "PY", "GO"]
 	default        = "IU"
+}
+
+module "jupyterlab" {
+    source = "https://registry.coder.com/modules/jupyterlab"
+    agent_id = coder_agent.example.id
+}
+
+module "dotfiles" {
+  source = "https://registry.coder.com/modules/dotfiles"
+  agent_id = coder_agent.example.id
 }
 
 data "coder_parameter" "lang" {
@@ -46,27 +56,27 @@ data "coder_parameter" "lang" {
 	description = "What container image and language do you want?"
 	mutable     = true
 	default     = "Node"
-	icon        = "https://www.docker.com/wp-content/uploads/2022/03/vertical-logo-monochromatic.png"
+	icon        = "/icon/docker.png"
 
 	option {
 		name = "Node"
 		value = "Node"
-		icon = "https://cdn.freebiesupply.com/logos/large/2x/nodejs-icon-logo-png-transparent.png"
+		icon = "/icon/node.svg"
 	}
 	option {
 		name = "Python"
 		value = "Python"
-		icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1869px-Python-logo-notext.svg.png"
+		icon = "/icon/python.svg"
 	}
 	option {
 		name = "Go"
 		value = "Go"
-		icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Go_Logo_Blue.svg/1200px-Go_Logo_Blue.svg.png"
+		icon = "/icon/go.svg"
 	} 
 	option {
 		name = "Java"
 		value = "Java"
-		icon = "https://assets.stickpng.com/images/58480979cef1014c0b5e4901.png"
+		icon = "/icon/java.svg"
 	}
 	order = 1       
 }
@@ -77,7 +87,7 @@ data "coder_parameter" "dotfiles_url" {
 	type        = "string"
 	default     = ""
 	mutable     = true 
-	icon        = "https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png"
+	icon        = "/icon/dotfiles.svg"
 	order       = 2
 }
 
