@@ -81,16 +81,6 @@ data "coder_parameter" "lang" {
 	order = 1       
 }
 
-data "coder_parameter" "dotfiles_url" {
-	name        = "Dotfiles URL (optional)"
-	description = "Personalize your workspace e.g., https://github.com/sharkymark/dotfiles.git"
-	type        = "string"
-	default     = ""
-	mutable     = true 
-	icon        = "/icon/dotfiles.svg"
-	order       = 2
-}
-
 resource "coder_agent" "main" {
 	os   = "linux"
 	arch = data.coder_provisioner.me.arch
@@ -100,7 +90,6 @@ resource "coder_agent" "main" {
 		GIT_COMMITTER_NAME = data.coder_workspace.me.owner
 		GIT_AUTHOR_EMAIL = data.coder_workspace.me.owner_email
 		GIT_COMMITTER_EMAIL = data.coder_workspace.me.owner_email
-		DOTFILES_URI = data.coder_parameter.dotfiles_url.value != "" ? data.coder_parameter.dotfiles_url.value : null
 	}
 
 	metadata {
@@ -144,12 +133,6 @@ resource "coder_agent" "main" {
 # add github to known hosts
 mkdir -p ~/.ssh
 ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
-
-# use coder CLI to clone and install dotfiles
-if [ -n "$DOTFILES_URI" ]; then
-	echo "Installing dotfiles from $DOTFILES_URI"
-	coder dotfiles -y "$DOTFILES_URI"
-fi
 
 # install and start code-server
 curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone
