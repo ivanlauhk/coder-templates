@@ -9,7 +9,7 @@ terraform {
       version = "~> 2.22"
     }
   }
-}
+}test
 
 locals {
   username = data.coder_workspace.me.owner
