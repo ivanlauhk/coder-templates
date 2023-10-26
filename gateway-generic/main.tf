@@ -40,7 +40,7 @@ module "vscode-web" {
   source         = "https://registry.coder.com/modules/vscode-web"
   agent_id       = coder_agent.main.id
   accept_license = true
-  folder         = "/home/coder"
+  folder         = "/home/coder/project"
   install_dir    = "/tmp/vscode"
   log_path       = "/tmp/vscode.log"
 }
@@ -49,9 +49,15 @@ module "jetbrains_gateway" {
 	source         = "https://registry.coder.com/modules/jetbrains-gateway"
 	agent_id       = coder_agent.main.id
 	agent_name     = "main"
-	folder         = "/home/coder"
+	folder         = "/home/coder/project"
 	jetbrains_ides = ["IU", "WS", "PY", "GO"]
 	default        = "IU"
+}
+
+module "vscode" {
+  source = "https://registry.coder.com/modules/vscode-desktop"
+  agent_id = coder_agent.main.id
+  folder = "/home/coder/project"
 }
 
 module "jupyterlab" {
@@ -131,28 +137,28 @@ resource "coder_agent" "main" {
 	}
 
 	display_apps {
-		vscode = true
+		vscode = false
 		vscode_insiders = false
 		ssh_helper = true
 		port_forwarding_helper = true
 		web_terminal = true
 	}
 
-	# dir = "/home/coder"
-	startup_script_behavior = "blocking"
-	startup_script_timeout = 180
-	startup_script = <<EOT
-#!/bin/sh
+	dir = "/home/coder"
+# 	startup_script_behavior = "blocking"
+# 	startup_script_timeout = 180
+# 	startup_script = <<EOT
+# #!/bin/sh
 
-# add github to known hosts
-mkdir -p ~/.ssh
-ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
+# # add github to known hosts
+# mkdir -p ~/.ssh
+# ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
 
-# install and start code-server
-# curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone --prefix=/tmp/code-server
-# /tmp/code-server/bin/code-server --auth none --port 13337 >/tmp/code-server.log 2>&1 &
+# # install and start code-server
+# # curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone --prefix=/tmp/code-server
+# # /tmp/code-server/bin/code-server --auth none --port 13337 >/tmp/code-server.log 2>&1 &
 
-	EOT
+# 	EOT
 }
 
 # resource "coder_app" "code-server" {
