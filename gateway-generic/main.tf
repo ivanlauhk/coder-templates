@@ -191,19 +191,6 @@ resource "docker_volume" "coder_volume" {
 	}
 }
 
-# resource "docker_image" "main" {
-#	name = "coder-${data.coder_workspace.me.id}"
-#	build {
-#		context = "./build"
-#		build_args = {
-#			USER = local.username
-#		}
-#	}
-#	triggers = {
-#    	dir_sha1 = sha1(join("", [for f in fileset(path.module, "build/*") : filesha1(f)]))
-# 	}
-#}
-
 resource "coder_metadata" "workspace_info" {
 	count       = data.coder_workspace.me.start_count
 	resource_id = docker_container.workspace[0].id   
