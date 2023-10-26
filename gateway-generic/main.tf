@@ -41,6 +41,8 @@ module "vscode-web" {
   agent_id       = coder_agent.main.id
   accept_license = true
   folder         = "/home/${local.username}"
+  install_dir    = "/tmp/vscode"
+  log_path       = "/tmp/vscode.log"
 }
 
 module "jetbrains_gateway" {
