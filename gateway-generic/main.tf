@@ -138,7 +138,7 @@ resource "coder_agent" "main" {
 		web_terminal = true
 	}
 
-	dir = "/home/${local.username}"
+	# dir = "/home/${local.username}"
 	startup_script_behavior = "blocking"
 	startup_script_timeout = 180
 	startup_script = <<EOT
@@ -149,26 +149,26 @@ mkdir -p ~/.ssh
 ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
 
 # install and start code-server
-curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone --prefix=/tmp/code-server
-/tmp/code-server/bin/code-server --auth none --port 13337 >/tmp/code-server.log 2>&1 &
+# curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone --prefix=/tmp/code-server
+# /tmp/code-server/bin/code-server --auth none --port 13337 >/tmp/code-server.log 2>&1 &
 
 	EOT
 }
 
-resource "coder_app" "code-server" {
-	agent_id      = coder_agent.main.id
-	slug          = "code-server"
-	display_name  = "code-server"
-	icon          = "/icon/code.svg"
-	url           = "http://localhost:13337?folder=/home/${local.username}"
-	subdomain     = true
-	share         = "owner"
-	healthcheck {
-		url       = "http://localhost:13337/healthz"
-		interval  = 3
-		threshold = 10
-	}  
-}
+# resource "coder_app" "code-server" {
+# 	agent_id      = coder_agent.main.id
+# 	slug          = "code-server"
+# 	display_name  = "code-server"
+# 	icon          = "/icon/code.svg"
+# 	url           = "http://localhost:13337?folder=/home/${local.username}"
+# 	subdomain     = true
+# 	share         = "owner"
+# 	healthcheck {
+# 		url       = "http://localhost:13337/healthz"
+# 		interval  = 3
+# 		threshold = 10
+# 	}  
+# }
 
 resource "docker_container" "workspace" {
 	count      = data.coder_workspace.me.start_count
@@ -186,6 +186,22 @@ resource "docker_container" "workspace" {
 		container_path = "/home/${local.username}"
 		volume_name    = docker_volume.coder_volume.name
 		read_only      = false
+	}
+	labels {
+		label = "coder.owner"
+		value = data.coder_workspace.me.owner
+	}
+	labels {
+		label = "coder.owner_id"
+		value = data.coder_workspace.me.owner_id
+	}
+	labels {
+		label = "coder.workspace_id"
+		value = data.coder_workspace.me.id
+	}
+	labels {
+		label = "coder.workspace_name"
+		value = data.coder_workspace.me.name
 	}
 }
 
