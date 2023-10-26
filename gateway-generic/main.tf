@@ -138,7 +138,7 @@ resource "coder_agent" "main" {
 		web_terminal = true
 	}
 
-	dir = "home/coder"
+	# dir = "/home/coder"
 	startup_script_behavior = "blocking"
 	startup_script_timeout = 180
 	startup_script = <<EOT
