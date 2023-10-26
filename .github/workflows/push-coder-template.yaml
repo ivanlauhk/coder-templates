@@ -16,22 +16,17 @@ jobs:
           with:
             fetch-depth: 0
 
-        - name: Run changed-files
-          id: changed-files
+        - name: Find changed directories
+          id: changed-directories
           uses: tj-actions/changed-files@v40
           with:
             json: true
             dir_names: true
-
-        - name: List all changed files
-          run: |
-            for file in ${{ steps.changed-files.outputs.all_changed_and_modified_files }}; do
-              echo "$file was changed"
-            done
+            files_ignore: .*
 
         - name: Set matrix
           id: set-matrix
-          run: echo "matrix={\"dirs\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
+          run: echo "matrix={\"dirs\":${{ steps.changed-directories.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
 
     update:
       runs-on: ubuntu-latest
