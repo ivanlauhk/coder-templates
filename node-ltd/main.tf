@@ -141,5 +141,3 @@ resource "docker_container" "workspace" {
     value = data.coder_workspace.me.name
   }
 }
-
-# test
