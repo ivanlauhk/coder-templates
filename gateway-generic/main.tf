@@ -31,10 +31,10 @@ data "coder_provisioner" "me" {
 data "coder_workspace" "me" {
 }
 
-module "code-server" {
-    source = "https://registry.coder.com/modules/code-server"
-    agent_id = coder_agent.main.id
-}
+# module "code-server" {
+#     source = "https://registry.coder.com/modules/code-server"
+#     agent_id = coder_agent.main.id
+# }
 
 module "jetbrains_gateway" {
 	source         = "https://registry.coder.com/modules/jetbrains-gateway"
@@ -140,27 +140,26 @@ mkdir -p ~/.ssh
 ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
 
 # install and start code-server
-# curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone
-# code-server --auth none --port 13337 >/dev/null 2>&1 &
+curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone
+code-server --auth none --port 13337 >/dev/null 2>&1 &
 
 	EOT
 }
 
-# code-server
-# resource "coder_app" "code-server" {
-# 	agent_id      = coder_agent.main.id
-# 	slug          = "code-server"
-# 	display_name  = "code-server"
-# 	icon          = "/icon/code.svg"
-# 	url           = "http://localhost:13337?folder=/home/${local.username}"
-# 	subdomain     = false
-# 	share         = "owner"
-# 	healthcheck {
-# 		url       = "http://localhost:13337/healthz"
-# 		interval  = 3
-# 		threshold = 10
-# 	}  
-# }
+resource "coder_app" "code-server" {
+	agent_id      = coder_agent.main.id
+	slug          = "code-server"
+	display_name  = "code-server"
+	icon          = "/icon/code.svg"
+	url           = "http://localhost:13337?folder=/home/${local.username}"
+	subdomain     = false
+	share         = "owner"
+	healthcheck {
+		url       = "http://localhost:13337/healthz"
+		interval  = 3
+		threshold = 10
+	}  
+}
 
 resource "docker_container" "workspace" {
 	count      = data.coder_workspace.me.start_count
