@@ -36,6 +36,13 @@ data "coder_workspace" "me" {
 #     agent_id = coder_agent.main.id
 # }
 
+module "vscode-web" {
+  source         = "https://registry.coder.com/modules/vscode-web"
+  agent_id       = coder_agent.main.id
+  accept_license = true
+  folder         = "/home/${local.username}"
+}
+
 module "jetbrains_gateway" {
 	source         = "https://registry.coder.com/modules/jetbrains-gateway"
 	agent_id       = coder_agent.main.id
