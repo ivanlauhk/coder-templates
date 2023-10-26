@@ -153,7 +153,7 @@ resource "coder_app" "code-server" {
 	agent_id      = coder_agent.main.id
 	slug          = "code-server"
 	display_name  = "code-server"
-	icon          = "/icon/code.svg"
+	icon          = "/icon/gateway.svg"
 	url           = "http://localhost:13337?folder=/home/${local.username}"
 	subdomain     = false
 	share         = "owner"
