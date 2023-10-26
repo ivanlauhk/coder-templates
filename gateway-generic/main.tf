@@ -42,12 +42,12 @@ module "jetbrains_gateway" {
 
 module "jupyterlab" {
     source = "https://registry.coder.com/modules/jupyterlab"
-    agent_id = coder_agent.example.id
+    agent_id = coder_agent.main.id
 }
 
 module "dotfiles" {
   source = "https://registry.coder.com/modules/dotfiles"
-  agent_id = coder_agent.example.id
+  agent_id = coder_agent.main.id
 }
 
 data "coder_parameter" "lang" {
@@ -163,7 +163,7 @@ resource "coder_app" "code-server" {
 	agent_id      = coder_agent.main.id
 	slug          = "code-server"
 	display_name  = "code-server"
-	icon          = "/icon/gateway.svg"
+	icon          = "/icon/code.svg"
 	url           = "http://localhost:13337?folder=/home/${local.username}"
 	subdomain     = false
 	share         = "owner"
