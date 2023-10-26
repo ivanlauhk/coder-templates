@@ -145,8 +145,9 @@ resource "coder_agent" "main" {
 	}
 
 	dir = "/home/coder"
-# 	startup_script_behavior = "blocking"
-# 	startup_script_timeout = 180
+	startup_script_behavior = "blocking"
+	startup_script_timeout = 180
+	startup_script = mkdir -p /home/coder/project
 # 	startup_script = <<EOT
 # #!/bin/sh
 
