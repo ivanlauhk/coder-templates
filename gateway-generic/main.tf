@@ -33,8 +33,8 @@ data "coder_workspace" "me" {
 
 module "jetbrains_gateway" {
 	source         = "https://registry.coder.com/modules/jetbrains-gateway"
-	agent_id       = coder_agent.dev.id
-	agent_name     = "dev"
+	agent_id       = coder_agent.main.id
+	agent_name     = "main"
 	folder         = "/home/${local.username}"
 	jetbrains_ides = ["GO", "WS", "IU", "PY"]
 	default        = "IU"
