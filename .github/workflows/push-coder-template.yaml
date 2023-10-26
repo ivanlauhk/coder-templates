@@ -34,7 +34,7 @@ jobs:
       runs-on: ubuntu-latest
       needs:
         - find-changes
-      if: ${{ needs.find-changes.outputs.dirs != '[]' }}
+      if: ${{ needs.find-changes.outputs.dirs != '' && toJson(fromJson(needs.find-changes.outputs.dirs)) != '[]' }}
       strategy:
         matrix: ${{  fromJson(needs.find-changes.outputs.dirs)  }}
       steps:
