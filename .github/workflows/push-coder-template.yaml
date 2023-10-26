@@ -22,7 +22,9 @@ jobs:
           with:
             json: true
             dir_names: true
-            files_ignore: .*/**\n.**
+            files_ignore: |
+              .*/**
+              .**
 
         - name: Set matrix
           id: set-matrix
