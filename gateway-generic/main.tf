@@ -40,7 +40,7 @@ module "vscode-web" {
   source         = "https://registry.coder.com/modules/vscode-web"
   agent_id       = coder_agent.main.id
   accept_license = true
-  folder         = "/home/${local.username}"
+  folder         = "/home/coder"
   install_dir    = "/tmp/vscode"
   log_path       = "/tmp/vscode.log"
 }
@@ -49,7 +49,7 @@ module "jetbrains_gateway" {
 	source         = "https://registry.coder.com/modules/jetbrains-gateway"
 	agent_id       = coder_agent.main.id
 	agent_name     = "main"
-	folder         = "/home/${local.username}"
+	folder         = "/home/coder"
 	jetbrains_ides = ["IU", "WS", "PY", "GO"]
 	default        = "IU"
 }
@@ -131,14 +131,14 @@ resource "coder_agent" "main" {
 	}
 
 	display_apps {
-		vscode = false
+		vscode = true
 		vscode_insiders = false
 		ssh_helper = true
 		port_forwarding_helper = true
 		web_terminal = true
 	}
 
-	# dir = "/home/${local.username}"
+	dir = "home/coder"
 	startup_script_behavior = "blocking"
 	startup_script_timeout = 180
 	startup_script = <<EOT
@@ -183,7 +183,7 @@ resource "docker_container" "workspace" {
 		ip   = "host-gateway"
 	}
 	volumes {
-		container_path = "/home/${local.username}"
+		container_path = "/home/coder"
 		volume_name    = docker_volume.coder_volume.name
 		read_only      = false
 	}
