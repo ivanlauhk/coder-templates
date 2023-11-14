@@ -65,9 +65,15 @@ module "dotfiles" {
   agent_id = coder_agent.main.id
 }
 
-module "git-commit-signing" {
-  source = "https://registry.coder.com/modules/git-commit-signing"
+module "git-clone" {
+  source = "https://registry.coder.com/modules/git-clone"
   agent_id = coder_agent.main.id
+  url = data.coder_parameter.repo.value
+  path = "/home/coder/project/"
+}
+
+data "coder_git_auth" "github" {
+  id = "github"
 }
 
 data "coder_parameter" "lang" {
@@ -149,7 +155,6 @@ resource "coder_agent" "main" {
 	startup_script_timeout = 180
 	startup_script = <<EOT
 		mkdir -p /home/coder/project
-		sudo apt install jq -y
 	EOT
 }
 
