@@ -156,6 +156,7 @@ resource "coder_agent" "main" {
 	startup_script_timeout = 180
 	startup_script = <<EOT
 		mkdir -p /home/coder/project
+		sudo apt install jq -y
 	EOT
 }
 
