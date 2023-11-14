@@ -12,8 +12,8 @@ terraform {
 locals {
 	username = data.coder_workspace.me.owner
 	image = {
-		"Java"   = "codercom/enterprise-java:ubuntu" 
-		"Python" = "codercom/enterprise-base:ubuntu" 
+		"Java"   = "codercom/enterprise-java:ubuntu"
+		"Python" = "codercom/enterprise-base:ubuntu"
 		"Go"     = "codercom/enterprise-golang:ubuntu"
 		"Node"   = "codercom/enterprise-node:ubuntu"
 	}
@@ -30,11 +30,6 @@ data "coder_provisioner" "me" {
 
 data "coder_workspace" "me" {
 }
-
-# module "code-server" {
-#     source = "https://registry.coder.com/modules/code-server"
-#     agent_id = coder_agent.main.id
-# }
 
 module "vscode-web" {
   source         = "https://registry.coder.com/modules/vscode-web"
@@ -70,6 +65,18 @@ module "dotfiles" {
   agent_id = coder_agent.main.id
 }
 
+module "git-config" {
+  source = "https://registry.coder.com/modules/git-config"
+  agent_id = coder_agent.main.id
+  allow_email_change = true
+  allow_username_change = true
+}
+
+module "git-commit-signing" {
+  source = "https://registry.coder.com/modules/git-commit-signing"
+  agent_id = coder_agent.main.id
+}
+
 data "coder_parameter" "lang" {
 	name        = "Programming Language"
 	type        = "string"
@@ -92,13 +99,13 @@ data "coder_parameter" "lang" {
 		name = "Go"
 		value = "Go"
 		icon = "/icon/go.svg"
-	} 
+	}
 	option {
 		name = "Java"
 		value = "Java"
 		icon = "/icon/java.svg"
 	}
-	order = 1       
+	order = 1
 }
 
 resource "coder_agent" "main" {
@@ -150,34 +157,7 @@ resource "coder_agent" "main" {
 	startup_script = <<EOT
 		mkdir -p /home/coder/project
 	EOT
-# 	startup_script = <<EOT
-# #!/bin/sh
-
-# # add github to known hosts
-# mkdir -p ~/.ssh
-# ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
-
-# # install and start code-server
-# # curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone --prefix=/tmp/code-server
-# # /tmp/code-server/bin/code-server --auth none --port 13337 >/tmp/code-server.log 2>&1 &
-
-# 	EOT
 }
-
-# resource "coder_app" "code-server" {
-# 	agent_id      = coder_agent.main.id
-# 	slug          = "code-server"
-# 	display_name  = "code-server"
-# 	icon          = "/icon/code.svg"
-# 	url           = "http://localhost:13337?folder=/home/${local.username}"
-# 	subdomain     = true
-# 	share         = "owner"
-# 	healthcheck {
-# 		url       = "http://localhost:13337/healthz"
-# 		interval  = 3
-# 		threshold = 10
-# 	}  
-# }
 
 resource "docker_container" "workspace" {
 	count      = data.coder_workspace.me.start_count
@@ -224,13 +204,13 @@ resource "docker_volume" "coder_volume" {
 
 resource "coder_metadata" "workspace_info" {
 	count       = data.coder_workspace.me.start_count
-	resource_id = docker_container.workspace[0].id   
+	resource_id = docker_container.workspace[0].id
 	item {
 		key   = "dockerhub-image"
 		value = "${lookup(local.image, data.coder_parameter.lang.value)}"
-	}     
+	}
 	item {
 		key   = "language"
 		value = data.coder_parameter.lang.value
-	}   
+	}
 }
