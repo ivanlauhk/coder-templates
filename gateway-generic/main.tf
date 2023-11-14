@@ -65,13 +65,6 @@ module "dotfiles" {
   agent_id = coder_agent.main.id
 }
 
-module "git-config" {
-  source = "https://registry.coder.com/modules/git-config"
-  agent_id = coder_agent.main.id
-  allow_email_change = true
-  allow_username_change = true
-}
-
 module "git-commit-signing" {
   source = "https://registry.coder.com/modules/git-commit-signing"
   agent_id = coder_agent.main.id
