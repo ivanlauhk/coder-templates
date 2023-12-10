@@ -61,14 +61,6 @@ module "coder-login" {
     agent_id = coder_agent.main.id
 }
 
-data "coder_parameter" "git_repo" {
-    name        = "Git Repository"
-    type        = "string"
-    description = "What git repo do you want to clone?"
-    mutable     = true
-    icon        = "/icon/git.svg"
-}
-
 data "coder_parameter" "lang" {
     name        = "Programming Language"
     type        = "string"
