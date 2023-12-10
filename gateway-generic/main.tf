@@ -56,12 +56,6 @@ module "dotfiles" {
   agent_id = coder_agent.main.id
 }
 
-module "git-clone" {
-    source   = "https://registry.coder.com/modules/git-clone"
-    agent_id = coder_agent.main.id
-    url      = data.coder_parameter.git_repo.value
-}
-
 module "coder-login" {
     source   = "https://registry.coder.com/modules/coder-login"
     agent_id = coder_agent.main.id
