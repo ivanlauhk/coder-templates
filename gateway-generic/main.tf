@@ -212,3 +212,4 @@ resource "coder_metadata" "workspace_info" {
         value = data.coder_parameter.lang.value
     }
 }
+
