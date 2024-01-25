@@ -149,7 +149,7 @@ resource "docker_container" "workspace" {
     name       = "coder-${data.coder_workspace.me.owner}-${lower(data.coder_workspace.me.name)}"
     hostname   = lower(data.coder_workspace.me.name)
     dns        = ["1.1.1.1"]
-    entrypoint = ["sh", "-c", "echo 'deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main' | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt-get update -y && apt-get install google-cloud-sdk x11-apps -y && ${replace(coder_agent.main.init_script, "/localhost|127\\.0\\.0\\.1/", "host.docker.internal")}"]
+    entrypoint = ["sh", "-c", "echo 'deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main' | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && sudo apt-get update -y && sudo apt-get install google-cloud-sdk x11-apps -y && ${replace(coder_agent.main.init_script, "/localhost|127\\.0\\.0\\.1/", "host.docker.internal")}"]
     env        = ["CODER_AGENT_TOKEN=${coder_agent.main.token}"]
     host {
         host = "host.docker.internal"
